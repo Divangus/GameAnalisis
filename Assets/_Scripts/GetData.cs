@@ -10,14 +10,19 @@ public class GetData : MonoBehaviour
 
     struct _user
     {
+        //int User_ID;
         string name;
         string country;
+        string gender;
+        int age;
         DateTime dateTime;
 
-        public _user(string name, string country, DateTime dateTime)
+        public _user(string name, string country,string gender, int age, DateTime dateTime)
         {
-            this.name = name; 
+            this.name= name;
             this.country = country;
+            this.age = age;
+            this.gender = gender;
             this.dateTime = dateTime;
         }
     }
@@ -33,11 +38,11 @@ public class GetData : MonoBehaviour
         Simulator.OnNewPlayer -= OnPLayerAdded;
     }
 
-    private void OnPLayerAdded(string name, string country, DateTime dateTime)
+    private void OnPLayerAdded(string name, string country, string gender, int age, DateTime dateTime)
     {
         Debug.Log("on send player");
 
-        _user User = new _user(name, country, dateTime);
+        _user User = new _user(name, country, gender, age, dateTime);
 
     }
 
