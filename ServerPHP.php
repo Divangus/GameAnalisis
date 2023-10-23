@@ -32,6 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Create a prepared statement
         $stmt = $conn->prepare($sql);
+        $last_id = $conn->insert_id;
 
         if ($stmt) {
             // Bind the parameters
@@ -40,6 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Execute the statement
             if ($stmt->execute()) {
                 echo "Data inserted into the database successfully.";
+                echo "User ID: " . $last_id;
             } else {
                 echo "Error inserting data: " . $stmt->error;
             }
