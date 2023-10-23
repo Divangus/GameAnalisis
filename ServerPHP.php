@@ -23,22 +23,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($userData !== null) {
         $name = $userData['name'];
+        $age = $userData['age'];
         $country = $userData['country'];
         $gender = $userData['gender'];
-        $age = $userData['age'];
-        //$dateTime = $userData['dateTime'];
 
-        //echo $name;
+        // Prepare an SQL statement to insert the data into the "Users" table
+        $sql = "INSERT INTO Users (name, age, country, gender) VALUES (?, ?, ?, ?)";
 
-        // Prepare an SQL statement to insert the data into a table
-        $sql = "INSERT INTO Users (name, country, gender, age/*, datetime*/) VALUES (?, ?, ?, ?, ?)";
-        
         // Create a prepared statement
         $stmt = $conn->prepare($sql);
 
         if ($stmt) {
             // Bind the parameters
-        $stmt->bind_param("sssis", $name, $country, $gender, $age/*, $dateTime*/);
+            $stmt->bind_param("siss", $name, $age, $country, $gender);
 
             // Execute the statement
             if ($stmt->execute()) {
