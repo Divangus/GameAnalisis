@@ -19,16 +19,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $jsonData = $_POST['jsonData'];
 
     // Decode the JSON data into an associative array
-    $userData = json_decode($jsonData, true);
+    $sessionData = json_decode($jsonData, true);
 
-    if ($userData !== null) {
-        $name = $userData['name'];
-        $age = $userData['age'];
-        $country = $userData['country'];
-        $gender = $userData['gender'];
+    if ($sessionData !== null) {
+        $Start = $sessionData['Start'];
+        $user_id = $sessionData['user_id'];
 
         // Prepare an SQL statement to insert the data into the "Users" table
-        $sql = "INSERT INTO Users (name, age, country, gender) VALUES (?, ?, ?, ?)";
+        $sql = "INSERT INTO Sessions (user_id, Start) VALUES (?, ?)";
+
 
         // Create a prepared statement
         $stmt = $conn->prepare($sql);
@@ -36,10 +35,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($stmt) {
             // Bind the parameters
-            $stmt->bind_param("siss", $name, $age, $country, $gender);
+            $stmt->bind_param("is", $last_id, $Start);
 
             // Execute the statement
             if ($stmt->execute()) {
+               // echo "Data inserted into the database successfully.";
                 echo $last_id;
             } else {
                 echo "Error inserting data: " . $stmt->error;

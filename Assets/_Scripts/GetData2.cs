@@ -9,7 +9,11 @@ using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCou
 
 public class GetData2 : MonoBehaviour
 {
-    public string serverUrl; // Set this in the Unity Inspector
+    public string serverUrl;
+    public string serverUrlItem;
+    public string serverUrlSessionsEnd;
+    private int userID = 0;
+    public string serverUrlSessions;// Set this in the Unity Inspector
 
     // Define a public class for serializing user data
     [Serializable]
@@ -24,19 +28,32 @@ public class GetData2 : MonoBehaviour
 
     public class SessionData
     {
-        public int sessions_id;
-        public string dateTime;
+        public int user_id;
+        public string Start;
     }
 
+    public class Item
+    {
+       public int Item_ID;
+       public string buyDateTime;
+        // session id o player id
+    }
 
-    private string _url;
+    public class EndSessionData
+    {
+        public int user_id;
+        public string End;
+        // session id
+    }
+
+    //private string _url;
 
     void OnEnable()
     {
         Simulator.OnNewPlayer += OnPlayerAdded;
         Simulator.OnNewSession += OnSessionsAdded;
-  
-        
+        Simulator.OnBuyItem += OnItemBought;
+        Simulator.OnEndSession += OnSessionsEnded;
     }
     
 
@@ -44,21 +61,37 @@ public class GetData2 : MonoBehaviour
     {
         Simulator.OnNewPlayer -= OnPlayerAdded;
         Simulator.OnNewSession -= OnSessionsAdded;
+        Simulator.OnBuyItem -= OnItemBought;
+        Simulator.OnEndSession -= OnSessionsEnded;
 
     }
 
-    private void OnSessionsAdded(DateTime dateTime)
+    private void OnSessionsAdded(DateTime Start)
     {
-        SessionData user = new SessionData
+        SessionData sessionData = new SessionData
         {
-          
-            dateTime = dateTime.ToString("yyyy-MM-dd HH:mm:ss")
+            user_id = userID,
+            Start = Start.ToString("yyyy-MM-dd HH:mm:ss")
         };
 
-        string jsonData = JsonUtility.ToJson(user);
+        string jsonData = JsonUtility.ToJson(sessionData);
 
         // Send the JSON data to the server
         StartCoroutine(UploadSession(jsonData));
+    }
+
+    private void OnSessionsEnded(DateTime End)
+    {
+        EndSessionData sessionData = new EndSessionData // to do
+        {
+            user_id = userID,
+            End = End.ToString("yyyy-MM-dd HH:mm:ss")
+        };
+
+        string jsonData = JsonUtility.ToJson(sessionData);
+
+        // Send the JSON data to the server
+        StartCoroutine(SessionEndData(jsonData));
     }
 
     private void OnPlayerAdded(string name, string country, string gender, int age, DateTime dateTime)
@@ -82,6 +115,24 @@ public class GetData2 : MonoBehaviour
         StartCoroutine(Upload(jsonData));
     }
 
+    private void OnItemBought(int Item_ID, DateTime buyDateTime)
+    {
+        Debug.Log("Player added");
+
+        // Create a UserData object and fill it with the player's data
+        Item user = new Item
+        {
+            Item_ID = Item_ID,
+            buyDateTime = buyDateTime.ToString("yyyy-MM-dd HH:mm:ss")
+        };
+
+        // Convert the UserData object to JSON
+        string jsonData = JsonUtility.ToJson(user);
+
+        // Send the JSON data to the server
+        StartCoroutine(UploadItem(jsonData));
+    }
+
     IEnumerator Upload(string jsonData)
     {
          WWWForm form = new WWWForm();
@@ -100,7 +151,15 @@ public class GetData2 : MonoBehaviour
             Debug.Log("Form upload complete!");
              Debug.Log("Data uploaded successfully!");
                 Debug.Log(www.downloadHandler.text);
-                Debug.Log(jsonData);
+            if (int.TryParse(www.downloadHandler.text, out userID))
+            {
+                Debug.Log("Received id: " + userID);
+            }
+            else
+            {
+                Debug.LogError("Failed to parse id from the response: " + www.downloadHandler.text);
+            }
+            Debug.Log(jsonData);
             CallbackEvents.OnAddPlayerCallback?.Invoke(8);
         }
 
@@ -112,7 +171,7 @@ public class GetData2 : MonoBehaviour
         form.AddField("jsonData", jsonData);
 
 
-        UnityWebRequest www = UnityWebRequest.Post(serverUrl, form);
+        UnityWebRequest www = UnityWebRequest.Post(serverUrlSessions, form);
         yield return www.SendWebRequest();
 
         if (www.result != UnityWebRequest.Result.Success)
@@ -126,6 +185,56 @@ public class GetData2 : MonoBehaviour
             Debug.Log(www.downloadHandler.text);
             Debug.Log(jsonData);
             CallbackEvents.OnNewSessionCallback?.Invoke(8);
+        }
+
+
+    }
+
+    IEnumerator UploadItem(string jsonData)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("jsonData", jsonData);
+
+
+        UnityWebRequest www = UnityWebRequest.Post(serverUrlItem, form);
+        yield return www.SendWebRequest();
+
+        if (www.result != UnityWebRequest.Result.Success)
+        {
+            Debug.Log(www.error);
+        }
+        else
+        {
+            Debug.Log("Form upload complete!");
+            Debug.Log("Data uploaded successfully!");
+            Debug.Log(www.downloadHandler.text);
+            Debug.Log(jsonData);
+            CallbackEvents.OnItemBuyCallback?.Invoke();
+        }
+
+
+    }
+
+    IEnumerator SessionEndData(string jsonData)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("jsonData", jsonData);
+
+
+        UnityWebRequest www = UnityWebRequest.Post(serverUrlSessionsEnd, form);
+        yield return www.SendWebRequest();
+
+        if (www.result != UnityWebRequest.Result.Success)
+        {
+            Debug.Log(www.error);
+        }
+        else
+        {
+            Debug.Log("Form upload complete!");
+            Debug.Log("Data uploaded successfully!");
+            Debug.Log(www.downloadHandler.text);
+            Debug.Log(jsonData);
+            CallbackEvents.OnEndSessionCallback?.Invoke(8);
         }
 
 
