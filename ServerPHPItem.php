@@ -19,14 +19,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $jsonData = $_POST['jsonData'];
 
     // Decode the JSON data into an associative array
-    $sessionData = json_decode($jsonData, true);
+    $itemData = json_decode($jsonData, true);
 
-    if ($sessionData !== null) {
-        $Start = $sessionData['Start'];
-        $user_id = $sessionData['user_id'];
+    if ($itemData !== null) {
+        $Item_ID = $itemData['Item_ID'];
+        $sessionID = $itemData['sessionID'];
+        $buyDateTime = $itemData['buyDateTime']
 
         // Prepare an SQL statement to insert the data into the "Users" table
-        $sql = "INSERT INTO Sessions (user_id, Start) VALUES (?, ?)";
+        $sql = "INSERT INTO Item (Item_ID, sessionID, buyDateTime) VALUES (?, ?, ?)";
 
 
         // Create a prepared statement
@@ -35,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($stmt) {
             // Bind the parameters
-            $stmt->bind_param("is", $last_id, $Start);
+            $stmt->bind_param("is", $last_id, $Item_ID, buyDateTime);
 
             // Execute the statement
             if ($stmt->execute()) {

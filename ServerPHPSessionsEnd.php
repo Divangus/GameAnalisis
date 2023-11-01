@@ -22,11 +22,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $sessionData = json_decode($jsonData, true);
 
     if ($sessionData !== null) {
-        $Start = $sessionData['Start'];
-        $user_id = $sessionData['user_id'];
+        $End = $sessionData['End'];
+        $session_id = $sessionData['session_id'];
 
         // Prepare an SQL statement to insert the data into the "Users" table
-        $sql = "INSERT INTO Sessions (user_id, Start) VALUES (?, ?)";
+        $sql = "INSERT INTO Sessions (session_id, End) VALUES (?, ?)";
 
 
         // Create a prepared statement
@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($stmt) {
             // Bind the parameters
-            $stmt->bind_param("is", $last_id, $Start);
+            $stmt->bind_param("is", $last_id, $End);
 
             // Execute the statement
             if ($stmt->execute()) {

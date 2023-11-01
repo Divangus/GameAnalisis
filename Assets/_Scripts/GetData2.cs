@@ -12,8 +12,12 @@ public class GetData2 : MonoBehaviour
     public string serverUrl;
     public string serverUrlItem;
     public string serverUrlSessionsEnd;
+    public string serverUrlSessions;
+
     private int userID = 0;
-    public string serverUrlSessions;// Set this in the Unity Inspector
+    private int sessionID = 0;
+
+
 
     // Define a public class for serializing user data
     [Serializable]
@@ -36,17 +40,16 @@ public class GetData2 : MonoBehaviour
     {
        public int Item_ID;
        public string buyDateTime;
-        // session id o player id
+       public int session_id;
+       //session id o player id
     }
 
     public class EndSessionData
     {
-        public int user_id;
+        //public int user_id;
         public string End;
-        // session id
+        public int session_id;
     }
-
-    //private string _url;
 
     void OnEnable()
     {
@@ -84,7 +87,7 @@ public class GetData2 : MonoBehaviour
     {
         EndSessionData sessionData = new EndSessionData // to do
         {
-            user_id = userID,
+            session_id = sessionID,
             End = End.ToString("yyyy-MM-dd HH:mm:ss")
         };
 
@@ -123,7 +126,8 @@ public class GetData2 : MonoBehaviour
         Item user = new Item
         {
             Item_ID = Item_ID,
-            buyDateTime = buyDateTime.ToString("yyyy-MM-dd HH:mm:ss")
+            buyDateTime = buyDateTime.ToString("yyyy-MM-dd HH:mm:ss"),
+            session_id = sessionID
         };
 
         // Convert the UserData object to JSON
@@ -183,6 +187,14 @@ public class GetData2 : MonoBehaviour
             Debug.Log("Form upload complete!");
             Debug.Log("Data uploaded successfully!");
             Debug.Log(www.downloadHandler.text);
+            if (int.TryParse(www.downloadHandler.text, out sessionID))
+            {
+                Debug.Log("Received id: " + sessionID);
+            }
+            else
+            {
+                Debug.LogError("Failed to parse id from the response: " + www.downloadHandler.text);
+            }
             Debug.Log(jsonData);
             CallbackEvents.OnNewSessionCallback?.Invoke(8);
         }
