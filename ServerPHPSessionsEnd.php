@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                // echo "Data inserted into the database successfully.";
                 echo $last_id;
             } else {
-                echo "Error inserting data: " . $stmt->error;
+                echo "Error inserting Enddata: " . $stmt->error;
             }
 
             // Close the statement

@@ -23,11 +23,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($itemData !== null) {
         $Item_ID = $itemData['Item_ID'];
-        $sessionID = $itemData['sessionID'];
-        $buyDateTime = $itemData['buyDateTime']
+        $session_id = $itemData['session_id'];
+        $buyDateTime = $itemData['buyDateTime'];
 
         // Prepare an SQL statement to insert the data into the "Users" table
-        $sql = "INSERT INTO Item (Item_ID, sessionID, buyDateTime) VALUES (?, ?, ?)";
+        $sql = "INSERT INTO Item (Item_ID, session_id, buyDateTime) VALUES (?, ?, ?)";
 
 
         // Create a prepared statement
@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                // echo "Data inserted into the database successfully.";
                 echo $last_id;
             } else {
-                echo "Error inserting data: " . $stmt->error;
+                echo "Error inserting Itemdata: " . $stmt->error;
             }
 
             // Close the statement
