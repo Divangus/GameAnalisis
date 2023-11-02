@@ -446,3 +446,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serverUrl: https://citmalumnes.upc.es/~laiapp4/ServerPHP.php
+  serverUrlItem: https://citmalumnes.upc.es/~laiapp4/ServerPHPItem.php
+  serverUrlSessionsEnd: https://citmalumnes.upc.es/~laiapp4/ServerPHPSessionsEnd.php
+  serverUrlSessions: https://citmalumnes.upc.es/~laiapp4/ServerPHPSessions.php
