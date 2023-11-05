@@ -24,10 +24,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($itemData !== null) {
         $Item_ID = $itemData['Item_ID'];
         $session_id = $itemData['session_id'];
-        //$buyDateTime = $itemData['buyDateTime'];
+        $buyDateTime = $itemData['buyDateTime'];
 
         // Prepare an SQL statement to insert the data into the "Users" table
-        $sql = "INSERT INTO Item (Item_ID, session_id) VALUES (?, ?)";
+        $sql = "INSERT INTO Item (Item_ID, session_id, buyDateTime) VALUES (?, ?, ?)";
 
 
         // Create a prepared statement
@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         if ($stmt) {
             // Bind the parameters
-            $stmt->bind_param("is", $Item_ID, $session_id);
+            $stmt->bind_param("iss", $Item_ID, $session_id, $buyDateTime);
 
             // Execute the statement
             if ($stmt->execute()) {

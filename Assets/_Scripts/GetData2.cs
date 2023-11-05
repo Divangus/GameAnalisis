@@ -39,7 +39,7 @@ public class GetData2 : MonoBehaviour
     public class Item
     {
        public int Item_ID;
-       //public string buyDateTime;
+       public string buyDateTime;
        public int session_id;
        //session id o player id
     }
@@ -128,7 +128,7 @@ public class GetData2 : MonoBehaviour
         Item user = new Item
         {
             Item_ID = Item_ID,
-            //buyDateTime = buyDateTime.ToString("yyyy-MM-dd HH:mm:ss"),
+            buyDateTime = buyDateTime.ToString("yyyy-MM-dd HH:mm:ss"),
             session_id = sessionID
         };
 
