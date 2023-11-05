@@ -39,7 +39,7 @@ public class GetData2 : MonoBehaviour
     public class Item
     {
        public int Item_ID;
-       public string buyDateTime;
+       //public string buyDateTime;
        public int session_id;
        //session id o player id
     }
@@ -116,17 +116,19 @@ public class GetData2 : MonoBehaviour
 
         // Send the JSON data to the server
         StartCoroutine(Upload(jsonData));
+
+        Debug.Log("Received userID: " + userID);
     }
 
     private void OnItemBought(int Item_ID, DateTime buyDateTime)
     {
-        Debug.Log("Player added");
+        Debug.Log("Item added");
 
         // Create a UserData object and fill it with the player's data
         Item user = new Item
         {
             Item_ID = Item_ID,
-            buyDateTime = buyDateTime.ToString("yyyy-MM-dd HH:mm:ss"),
+            //buyDateTime = buyDateTime.ToString("yyyy-MM-dd HH:mm:ss"),
             session_id = sessionID
         };
 
@@ -152,8 +154,8 @@ public class GetData2 : MonoBehaviour
         }
         else
         {
-            Debug.Log("Form upload complete!");
-             Debug.Log("Data uploaded successfully!");
+            //Debug.Log("Form upload complete!");
+             //Debug.Log("Data uploaded successfully!");
                 Debug.Log(www.downloadHandler.text);
             if (int.TryParse(www.downloadHandler.text, out userID))
             {
@@ -184,8 +186,8 @@ public class GetData2 : MonoBehaviour
         }
         else
         {
-            Debug.Log("Form upload complete!");
-            Debug.Log("Data uploaded successfully!");
+            //Debug.Log("Form upload complete!");
+            //Debug.Log("Data uploaded successfully!");
             Debug.Log(www.downloadHandler.text);
             if (int.TryParse(www.downloadHandler.text, out sessionID))
             {
@@ -217,8 +219,8 @@ public class GetData2 : MonoBehaviour
         }
         else
         {
-            Debug.Log("Form upload complete!");
-            Debug.Log("Data uploaded successfully!");
+            //Debug.Log("Form upload complete!");
+            //Debug.Log("Data uploaded successfully!");
             Debug.Log(www.downloadHandler.text);
             Debug.Log(jsonData);
             CallbackEvents.OnItemBuyCallback?.Invoke();
@@ -242,8 +244,8 @@ public class GetData2 : MonoBehaviour
         }
         else
         {
-            Debug.Log("Form upload complete!");
-            Debug.Log("Data uploaded successfully!");
+            //Debug.Log("Form upload complete!");
+            //Debug.Log("Data uploaded successfully!");
             Debug.Log(www.downloadHandler.text);
             Debug.Log(jsonData);
             CallbackEvents.OnEndSessionCallback?.Invoke(8);

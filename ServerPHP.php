@@ -32,14 +32,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Create a prepared statement
         $stmt = $conn->prepare($sql);
-        $last_id = $conn->insert_id;
-
+        
         if ($stmt) {
             // Bind the parameters
             $stmt->bind_param("siss", $name, $age, $country, $gender);
 
             // Execute the statement
             if ($stmt->execute()) {
+                $last_id = $conn->insert_id;
                 echo $last_id;
             } else {
                 echo "Error inserting data: " . $stmt->error;

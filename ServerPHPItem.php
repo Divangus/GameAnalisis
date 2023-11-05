@@ -24,23 +24,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($itemData !== null) {
         $Item_ID = $itemData['Item_ID'];
         $session_id = $itemData['session_id'];
-        $buyDateTime = $itemData['buyDateTime'];
+        //$buyDateTime = $itemData['buyDateTime'];
 
         // Prepare an SQL statement to insert the data into the "Users" table
-        $sql = "INSERT INTO Item (Item_ID, session_id, buyDateTime) VALUES (?, ?, ?)";
+        $sql = "INSERT INTO Item (Item_ID, session_id) VALUES (?, ?)";
 
 
         // Create a prepared statement
         $stmt = $conn->prepare($sql);
-        $last_id = $conn->insert_id;
-
+        
         if ($stmt) {
             // Bind the parameters
-            $stmt->bind_param("is", $last_id, $Item_ID, buyDateTime);
+            $stmt->bind_param("is", $last_id, $Item_ID);
 
             // Execute the statement
             if ($stmt->execute()) {
-               // echo "Data inserted into the database successfully.";
+                $last_id = $conn->insert_id;
                 echo $last_id;
             } else {
                 echo "Error inserting Itemdata: " . $stmt->error;
