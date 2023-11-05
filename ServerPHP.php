@@ -14,6 +14,8 @@ if ($conn->connect_error) {
 }
 
 // Check if the request method is POST
+// ...
+// ...
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Read the JSON data from the request body
     $jsonData = $_POST['jsonData'];
@@ -26,16 +28,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $age = $userData['age'];
         $country = $userData['country'];
         $gender = $userData['gender'];
+        $dateTime = $userData['dateTime']; // Include the datetime value
 
         // Prepare an SQL statement to insert the data into the "Users" table
-        $sql = "INSERT INTO Users (name, age, country, gender) VALUES (?, ?, ?, ?)";
+        $sql = "INSERT INTO Users (name, age, country, gender, datetime) VALUES (?, ?, ?, ?, ?)";
 
         // Create a prepared statement
         $stmt = $conn->prepare($sql);
-        
+
         if ($stmt) {
-            // Bind the parameters
-            $stmt->bind_param("siss", $name, $age, $country, $gender);
+            // Bind the parameters with the updated type definition string
+            $stmt->bind_param("sisss", $name, $age, $country, $gender, $dateTime);
 
             // Execute the statement
             if ($stmt->execute()) {

@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         if ($stmt) {
             // Bind the parameters
-            $stmt->bind_param("is", $last_id, $Item_ID);
+            $stmt->bind_param("is", $Item_ID, $session_id);
 
             // Execute the statement
             if ($stmt->execute()) {

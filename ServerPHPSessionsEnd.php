@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $session_id = $sessionData['session_id'];
 
         // Prepare an SQL statement to insert the data into the "Users" table
-        $sql = "INSERT INTO Sessions (session_id, End) VALUES (?, ?)";
+        $sql = "INSERT INTO Sessions (session_id, End) VALUES (?, ?) ON DUPLICATE KEY UPDATE End = VALUES(End)";
 
 
         // Create a prepared statement
@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($stmt) {
             // Bind the parameters
-            $stmt->bind_param("is", $last_id, $End);
+            $stmt->bind_param("is", $session_id, $End);
 
             // Execute the statement
             if ($stmt->execute()) {
